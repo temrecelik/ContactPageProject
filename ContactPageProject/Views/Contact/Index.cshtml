@@ -1,0 +1,308 @@
+﻿
+
+@{
+    Layout = null;
+}
+
+@model MainContactModel
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/select2-bootstrap.css" />
+	<link href="~/plugins/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ContactPageProject.styles.css" asp-append-version="true" />
+   
+</head>
+<body>
+    <div class="container d-flex justify-content-center";>
+  
+        @if (TempData["SuccessMessage"] != null)
+        {
+                <div id="successAlert" class="alert alert-success mt-4" role="alert">
+                @TempData["SuccessMessage"]
+			    </div>        
+        }
+
+    </div>
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+    <div class="container d-flex justify-content-center" style="margin-top: 10vh;">
+       
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" onclick="showForm('StudentForm')">
+            <label class="form-check-label" for="inlineRadio1">Öğrenci</label>  
+        </div>
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" onclick="showForm('AcedemicStaffForm')">
+            <label class="form-check-label" for="inlineRadio2">Akademik Personel</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3" onclick="showForm('OtherPersonForm')">
+            <label class="form-check-label" for="inlineRadio3">Diğer</label>
+        </div>
+
+	</div>
+
+    <form class="contact-form" name="Studentform" id="StudentForm" asp-controller="Contact" asp-action="Index" method="post" enctype="multipart/form-data" style="display:none;">
+        
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="StudentContactViewModel.studentNameSurname"></label>
+            <div class="col-md-6">
+                <input asp-for="StudentContactViewModel.studentNameSurname" class="form-control">
+                <span asp-validation-for="StudentContactViewModel.studentNameSurname" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label for="UserName" class="col-md-2 col-form-label" asp-for="StudentContactViewModel.studentNumber"></label>
+            <div class="col-md-6">
+                <input type="number" asp-for="StudentContactViewModel.studentNumber" class="form-control">
+                <span asp-validation-for="StudentContactViewModel.studentNumber" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="StudentContactViewModel.StudentEmail"></label>
+            <div class="col-md-6">
+                <input asp-for="StudentContactViewModel.StudentEmail" class="form-control">
+                <span asp-validation-for="StudentContactViewModel.StudentEmail" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label class="col-md-2 col-form-label" asp-for="StudentContactViewModel.department"></label>
+            <div class="col-md-6">
+                <select class="custom-select" id="Selectdepartment1" asp-for="StudentContactViewModel.department"
+                        asp-items="@ViewBag.DepartmentList">
+                    <option value="" selected disabled></option>
+                </select>
+                <span asp-validation-for="StudentContactViewModel.department" class="text-danger"></span>
+
+
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label class="col-md-2 col-form-label" asp-for="StudentContactViewModel.relevantUnit"></label>
+            <div class="col-md-6">
+                <select class="custom-select" id="SelectStudentSubject" asp-for="StudentContactViewModel.relevantUnit"
+                        asp-items="@ViewBag.RelevantUnitList">
+                    <option value="" selected disabled></option>
+                </select>
+                <span asp-validation-for="StudentContactViewModel.relevantUnit" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="StudentContactViewModel.messageSubject"></label>
+            <div class="col-md-6">
+                <input asp-for="StudentContactViewModel.messageSubject" class="form-control">
+                <span asp-validation-for="StudentContactViewModel.messageSubject" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="StudentContactViewModel.MessageText"></label>
+            <div class="col-md-6">           
+                <textarea asp-for="StudentContactViewModel.MessageText" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="StudentContactViewModel.MessageText" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="StudentContactViewModel.formFile"></label>
+            <div class="col-md-6">
+                <input type="file" asp-for="StudentContactViewModel.formFile" class="form-control">
+                <div style="font-size: smaller;">Zorunlu Değil(Lütfen jpg, png, pdf, docx veya xlsx formatında bir dosya yükleyiniz.)</div>
+                <span asp-validation-for="StudentContactViewModel.formFile" class="text-danger"></span>
+            </div>
+        </div>
+
+        <input type="hidden" asp-for="Applicant" value="Student" />
+        
+        <div class="d-flex justify-content-center m-2">            
+            <button type="submit" class="btn btn-outline-secondary">Gönder</button>
+        </div>
+
+    </form>      
+
+
+    <form class="contact-form" name="AcedemicStaffForm" id="AcedemicStaffForm" method="post" enctype="multipart/form-data" style="display:none;">
+        
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="AcademicStaffContactViewModel.academicStaffNameSurname"></label>
+            <div class="col-md-6">
+                <input asp-for="AcademicStaffContactViewModel.academicStaffNameSurname" class="form-control">
+                <span asp-validation-for="AcademicStaffContactViewModel.academicStaffNameSurname" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="AcademicStaffContactViewModel.academicStaffEmail"></label>
+            <div class="col-md-6">
+                <input asp-for="AcademicStaffContactViewModel.academicStaffEmail" class="form-control">
+                <span asp-validation-for="AcademicStaffContactViewModel.academicStaffEmail" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label class="col-md-2 col-form-label" asp-for="AcademicStaffContactViewModel.department"></label>
+            <div class="col-md-6">
+                <select class="custom-select" id="Selectdepartment2" asp-for="AcademicStaffContactViewModel.department"
+                        asp-items="@ViewBag.DepartmentList">
+                    <option value="" selected disabled></option>
+                </select>
+                <span asp-validation-for="AcademicStaffContactViewModel.department" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label class="col-md-2 col-form-label" asp-for="AcademicStaffContactViewModel.relevantUnit"></label>
+            <div class="col-md-6">
+                <select class="custom-select" id="AcedemicStaffList" asp-for="AcademicStaffContactViewModel.relevantUnit"
+                        asp-items="@ViewBag.RelevantUnitList">
+                    <option value="" selected disabled></option>
+                </select>
+                <span asp-validation-for="AcademicStaffContactViewModel.relevantUnit" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="AcademicStaffContactViewModel.messageSubject"></label>
+            <div class="col-md-6">
+                <input asp-for="AcademicStaffContactViewModel.messageSubject" class="form-control">
+                <span asp-validation-for="AcademicStaffContactViewModel.messageSubject" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="AcademicStaffContactViewModel.MessageText"></label>
+            <div class="col-md-6">
+                <textarea asp-for="AcademicStaffContactViewModel.MessageText" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="AcademicStaffContactViewModel.MessageText" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label class="col-md-2 col-form-label" asp-for="AcademicStaffContactViewModel.formFile"></label>
+            <div class="col-md-6">
+                <input type="file" asp-for="AcademicStaffContactViewModel.formFile" class="form-control">
+                <div style="font-size: smaller;">Zorunlu Değil(Lütfen jpg, png, pdf, docx veya xlsx formatında bir dosya yükleyiniz.)</div>
+                <span asp-validation-for="AcademicStaffContactViewModel.formFile" class="text-danger"></span>
+            </div>
+        </div>
+    
+        <input type="hidden" asp-for="Applicant" value="AcedemicStaff" />
+
+        <div class="d-flex justify-content-center m-2">
+            <button type="submit" class="btn btn-outline-secondary">Gönder</button>
+        </div>
+
+    </form>
+
+
+    <form class="contact-form" name="OtherPersonForm" id="OtherPersonForm" method="post" enctype="multipart/form-data" style="display:none;">
+        
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="OtherPersonContactViewModel.otherPersonNameSurname"></label>
+            <div class="col-md-6">
+                <input asp-for="OtherPersonContactViewModel.otherPersonNameSurname" class="form-control">
+                <span asp-validation-for="OtherPersonContactViewModel.otherPersonNameSurname" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="OtherPersonContactViewModel.otherPersonEmail"></label>
+            <div class="col-md-6">
+                <input asp-for="OtherPersonContactViewModel.otherPersonEmail" class="form-control">
+                <span asp-validation-for="OtherPersonContactViewModel.otherPersonEmail" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="OtherPersonContactViewModel.contactPhoneNumber"></label>
+            <div class="col-md-6">
+                <input type="number" asp-for="OtherPersonContactViewModel.contactPhoneNumber" class="form-control">
+                <span asp-validation-for="OtherPersonContactViewModel.contactPhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label class="col-md-2 col-form-label" asp-for="OtherPersonContactViewModel.messageSubject"></label>
+            <div class="col-md-6">
+                <input asp-for="OtherPersonContactViewModel.messageSubject" class="form-control">
+                <span asp-validation-for="OtherPersonContactViewModel.messageSubject" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label  class="col-md-2 col-form-label" asp-for="OtherPersonContactViewModel.MessageText"></label>
+            <div class="col-md-6">
+                <textarea asp-for="OtherPersonContactViewModel.MessageText" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="OtherPersonContactViewModel.MessageText" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-3 container d-flex justify-content-center m-2">
+            <label class="col-md-2 col-form-label" asp-for="OtherPersonContactViewModel.formFile"></label>
+            <div class="col-md-6">
+                <input type="file" asp-for="OtherPersonContactViewModel.formFile" class="form-control">
+                <div style="font-size: smaller;">Zorunlu Değil(Lütfen jpg, png, pdf, docx veya xlsx formatında bir dosya yükleyiniz.)</div>
+                <span asp-validation-for="OtherPersonContactViewModel.formFile" class="text-danger"></span>
+            </div>
+        </div>
+
+        <input type="hidden" asp-for="Applicant" value="OtherPerson" />
+
+        <div class="d-flex justify-content-center m-2">
+            <button type="submit" class="btn btn-outline-secondary">Gönder</button>
+        </div>
+
+    </form>
+
+    <script>
+        function showForm(formId) {
+      
+            document.getElementById('StudentForm').style.display = 'none';        
+            document.getElementById('AcedemicStaffForm').style.display = 'none';   
+            document.getElementById('OtherPersonForm').style.display = 'none';
+            document.getElementById(formId).style.display = 'block';
+        }
+
+        window.onload = function () {
+            var applicantType = '@(TempData["Applicant"] ?? "null")'; 
+
+            if (applicantType !== "null") {
+                showForm(applicantType + "Form");
+            }
+
+            var successAlert = document.getElementById("successAlert");
+
+            if (successAlert) {
+                setTimeout(function () {
+                    successAlert.style.display = "none"; 
+                }, 4000);
+            }           
+        }
+ </script>          
+           
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/plugins/select2.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="~/js/indexscript2.js"></script>
+	 
+    </body>
+
+</html>
